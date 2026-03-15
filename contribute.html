@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contribute — Sans Tabac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0c0b09;--bg-card:#131209;--bg-hover:#1a1914;
+    --gold:#c4a14a;--gold-dim:#7a6228;
+    --cream:#e8e0cc;--cream-dim:#9a917c;
+    --red:#9e2020;--green:#4a8c4a;
+    --border:rgba(196,161,74,.18);--border-bright:rgba(196,161,74,.45);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.5;}
+
+  header{border-bottom:1px solid var(--border);padding:0 4rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;background:rgba(12,11,9,.92);backdrop-filter:blur(8px);z-index:100;}
+  .header-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.15em;color:var(--gold);text-decoration:none;}
+  nav{display:flex;gap:2.5rem;align-items:center;}
+  nav a{font-family:'DM Mono',monospace;font-size:.65rem;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+  nav a:hover{color:var(--gold);}
+
+  /* ── PAGE HEADER ──────────────────────────────────────────── */
+  .page-header{
+    padding:6rem 4rem 4rem;
+    border-bottom:1px solid var(--border);
+    animation:fadeUp .7s ease both;
+  }
+  .eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,7rem);letter-spacing:.04em;line-height:.9;color:var(--cream);margin-bottom:2rem;}
+  .page-desc{max-width:560px;font-size:1.05rem;color:var(--cream-dim);font-weight:300;line-height:1.7;}
+
+  /* ── CONTENT ──────────────────────────────────────────────── */
+  .content{max-width:900px;margin:0 auto;padding:5rem 4rem;}
+
+  /* ── STEPS ────────────────────────────────────────────────── */
+  .steps{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);margin-bottom:4rem;}
+  .step{display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid var(--border);}
+  .step:last-child{border-bottom:none;}
+  .step-num{
+    font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);
+    border-right:1px solid var(--border);
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:2rem 0 1.5rem;
+    line-height:1;
+    letter-spacing:.04em;
+  }
+  .step-body{padding:2rem 2.5rem;}
+  .step-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:var(--cream);margin-bottom:.75rem;}
+  .step-text{font-size:1rem;color:var(--cream-dim);font-weight:300;line-height:1.7;margin-bottom:1rem;}
+  .step-text:last-child{margin-bottom:0;}
+  .step-text a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-dim);transition:border-color .2s;}
+  .step-text a:hover{border-color:var(--gold);}
+  .step-text strong{color:var(--cream);font-weight:400;}
+
+  /* ── SECTION HEADINGS ─────────────────────────────────────── */
+  .section-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.06em;color:var(--cream);margin-bottom:2rem;line-height:1;}
+
+  /* ── FILENAME CONVENTION TABLE ────────────────────────────── */
+  .convention-table{
+    width:100%;border:1px solid var(--border);border-collapse:collapse;
+    font-family:'DM Mono',monospace;font-size:.7rem;
+    margin-bottom:2rem;
+  }
+  .convention-table th{
+    background:var(--bg-card);color:var(--gold-dim);
+    font-weight:300;letter-spacing:.15em;text-transform:uppercase;
+    padding:.75rem 1rem;border-bottom:1px solid var(--border);
+    text-align:left;font-size:.58rem;
+  }
+  .convention-table td{
+    padding:.75rem 1rem;border-bottom:1px solid var(--border);
+    color:var(--cream-dim);vertical-align:top;line-height:1.5;
+  }
+  .convention-table tr:last-child td{border-bottom:none;}
+  .convention-table tr:hover td{background:var(--bg-hover);}
+  .convention-table .part{color:var(--gold);font-size:.75rem;}
+  .convention-table .required{color:var(--red);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;}
+  .convention-table .optional{color:var(--cream-dim);opacity:.5;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;}
+
+  /* ── PATTERN DISPLAY ──────────────────────────────────────── */
+  .pattern-box{
+    background:var(--bg-card);border:1px solid var(--border);
+    padding:1.5rem 2rem;font-family:'DM Mono',monospace;font-size:.75rem;
+    letter-spacing:.08em;color:var(--cream-dim);margin-bottom:1.5rem;
+    line-height:2;
+  }
+  .pattern-box .p-year{color:#7ec8e3;}
+  .pattern-box .p-constructor{color:#f0a830;}
+  .pattern-box .p-brand{color:#c88ecc;}
+  .pattern-box .p-livery{color:#88cc88;}
+  .pattern-box .p-desc{color:var(--cream-dim);opacity:.6;}
+  .pattern-box .p-sep{color:var(--border-bright);}
+
+  /* Examples */
+  .examples{display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem;}
+  .example-file{
+    font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;
+    color:var(--cream-dim);background:var(--bg);border:1px solid var(--border);
+    padding:.5rem 1rem;display:flex;align-items:center;gap:1rem;
+  }
+  .example-file .ex-icon{color:var(--gold-dim);font-size:.8rem;}
+
+  /* ── FILENAME BUILDER ─────────────────────────────────────── */
+  .builder-wrap{
+    background:var(--bg-card);border:1px solid var(--border);
+    padding:2.5rem;margin-bottom:4rem;
+  }
+  .builder-title{
+    font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;
+    color:var(--cream);margin-bottom:.5rem;
+  }
+  .builder-subtitle{
+    font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--gold-dim);margin-bottom:2rem;
+  }
+
+  .builder-fields{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.5rem 2rem;
+    margin-bottom:2rem;
+  }
+  .field{display:flex;flex-direction:column;gap:.4rem;}
+  .field-label{
+    font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold-dim);
+  }
+  .field-label .req{color:var(--red);margin-left:.3rem;}
+  .field-label .opt{color:var(--cream-dim);opacity:.4;margin-left:.3rem;}
+  .field input,.field select{
+    background:transparent;border:1px solid var(--border);
+    padding:.7rem 1rem;color:var(--cream);
+    font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;
+    outline:none;transition:border-color .2s;
+    -webkit-appearance:none;appearance:none;
+  }
+  .field input::placeholder{color:var(--cream-dim);opacity:.35;}
+  .field input:focus,.field select:focus{border-color:var(--border-bright);}
+  .field select option{background:#1a1914;color:var(--cream);}
+
+  /* Output */
+  .builder-output{
+    border:1px solid var(--border);
+    background:var(--bg);
+    padding:1.25rem 1.5rem;
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    flex-wrap:wrap;
+  }
+  .output-filename{
+    font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.06em;
+    color:var(--cream);word-break:break-all;flex:1;
+    min-width:0;
+  }
+  .output-filename .out-year{color:#7ec8e3;}
+  .output-filename .out-constructor{color:#f0a830;}
+  .output-filename .out-brand{color:#c88ecc;}
+  .output-filename .out-livery{color:#88cc88;}
+  .output-filename .out-desc{color:var(--cream-dim);}
+  .output-filename .out-sep{color:var(--border-bright);}
+  .output-filename .out-ext{color:var(--cream-dim);opacity:.5;}
+  .output-filename.invalid{color:var(--cream-dim);opacity:.5;}
+
+  .copy-btn{
+    font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;
+    background:var(--gold);color:var(--bg);border:none;padding:.6rem 1.2rem;
+    cursor:pointer;transition:opacity .2s;white-space:nowrap;flex-shrink:0;
+  }
+  .copy-btn:hover{opacity:.85;}
+  .copy-btn:disabled{opacity:.3;cursor:default;}
+  .copy-feedback{
+    font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--green);opacity:0;transition:opacity .3s;white-space:nowrap;
+  }
+  .copy-feedback.visible{opacity:1;}
+
+  /* Validation hints */
+  .field-hint{
+    font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.08em;
+    color:var(--red);margin-top:2px;min-height:1em;
+    transition:opacity .2s;opacity:0;
+  }
+  .field-hint.visible{opacity:1;}
+
+  /* ── COPYRIGHT NOTE ───────────────────────────────────────── */
+  .copyright-note{
+    border:1px solid var(--border);padding:2rem 2.5rem;background:var(--bg-card);
+    margin-bottom:4rem;
+  }
+  .copyright-note p{font-size:1rem;color:var(--cream-dim);font-weight:300;line-height:1.7;}
+  .copyright-note p+p{margin-top:1rem;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .page-header{animation:fadeUp .7s ease both;}
+  .content{animation:fadeUp .7s .15s ease both;}
+
+  @media(max-width:700px){
+    header{padding:0 1.5rem;}
+    nav{gap:1.2rem;}
+    .page-header{padding:3rem 1.5rem 2.5rem;}
+    .content{padding:3rem 1.5rem;}
+    .step{grid-template-columns:56px 1fr;}
+    .step-num{font-size:2.5rem;padding:1.5rem 0 1rem;}
+    .step-body{padding:1.5rem;}
+    .builder-fields{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="header-logo">Sans Tabac</a>
+  <nav>
+    <a href="browse.html?group=constructor">Constructors</a>
+    <a href="browse.html?group=year">By Year</a>
+    <a href="browse.html?group=brand">Brands</a>
+    <a href="browse.html?livery=sans">Sans Tabac Only</a>
+    <a href="browse.html">All Photos</a>
+  </nav>
+</header>
+
+<div class="page-header">
+  <div class="eyebrow">Contribute to the Archive</div>
+  <div class="page-title">Add a<br>Photograph</div>
+  <p class="page-desc">
+    The archive is built from community contributions. If you have photographs of Formula One cars from the tobacco livery era — either with branding visible or removed — this is how to add them.
+  </p>
+</div>
+
+<div class="content">
+
+  <!-- HOW TO CONTRIBUTE -->
+  <div class="section-eyebrow">How It Works</div>
+  <div class="section-title">Three Steps</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Name Your File Correctly</div>
+        <p class="step-text">
+          Every photograph must follow an <strong>exact filename convention</strong> so the archive can parse year, constructor, brand, and livery type automatically. Use the filename builder below to generate the correct name.
+        </p>
+        <p class="step-text">
+          Supported formats: <strong>.jpg</strong> &nbsp;·&nbsp; <strong>.jpeg</strong> &nbsp;·&nbsp; <strong>.png</strong> &nbsp;·&nbsp; <strong>.webp</strong>
+        </p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Fork the Repository</div>
+        <p class="step-text">
+          Fork the <a href="https://github.com/sanstabac/sanstabac.github.io">Sans Tabac repository on GitHub</a>, drop your named image file into the <strong>photos/</strong> directory, and commit it.
+        </p>
+        <p class="step-text">
+          You can add multiple files in a single commit. The manifest is regenerated automatically on every push via GitHub Actions — you do not need to edit <strong>data/photos.json</strong> by hand.
+        </p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Open a Pull Request</div>
+        <p class="step-text">
+          Open a pull request against the <strong>main</strong> branch. Include a brief note on the source of the photograph (race, event, photographer credit if known). The pull request will be reviewed and merged if the photo and filename are valid.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILENAME CONVENTION -->
+  <div class="section-eyebrow">Filename Reference</div>
+  <div class="section-title">Naming Convention</div>
+
+  <div class="pattern-box">
+    <span class="p-year">YEAR</span><span class="p-sep">_</span><span class="p-constructor">Constructor</span><span class="p-sep">_</span><span class="p-brand">Brand</span><span class="p-sep">_</span><span class="p-livery">[full|sans]</span><span class="p-sep">_</span><span class="p-desc">optional-description</span><span class="p-sep">.</span><span class="p-desc">jpg</span>
+    <br>
+    <span style="color:var(--cream-dim);opacity:.35;font-size:.65rem">Use hyphens within multi-word constructor/brand names and descriptions. No spaces anywhere.</span>
+  </div>
+
+  <table class="convention-table">
+    <thead>
+      <tr>
+        <th>Part</th>
+        <th>Format</th>
+        <th>Examples</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="part">YEAR</td>
+        <td>4-digit season year</td>
+        <td>1988, 1994, 2005</td>
+        <td class="required">Required</td>
+      </tr>
+      <tr>
+        <td class="part">Constructor</td>
+        <td>Team name; hyphens for spaces</td>
+        <td>McLaren, BAR-Honda, Lotus</td>
+        <td class="required">Required</td>
+      </tr>
+      <tr>
+        <td class="part">Brand</td>
+        <td>Tobacco brand; hyphens for spaces</td>
+        <td>Marlboro, Lucky-Strike, John-Player-Special</td>
+        <td class="required">Required</td>
+      </tr>
+      <tr>
+        <td class="part">full / sans</td>
+        <td>Whether tobacco branding is visible</td>
+        <td>full = ads shown &nbsp;·&nbsp; sans = ads removed</td>
+        <td class="required">Required</td>
+      </tr>
+      <tr>
+        <td class="part">description</td>
+        <td>Optional context; hyphens for spaces</td>
+        <td>monaco-pitlane, qualifying-session, podium</td>
+        <td class="optional">Optional</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-eyebrow" style="margin-bottom:.75rem">Examples</div>
+  <div class="examples">
+    <div class="example-file"><span class="ex-icon">◎</span> 1988_McLaren_Marlboro_full_monaco-pitlane.jpg</div>
+    <div class="example-file"><span class="ex-icon">◎</span> 1994_Williams_Rothmans_sans_france-qualifying.jpg</div>
+    <div class="example-file"><span class="ex-icon">◎</span> 2005_Ferrari_Marlboro_sans_european-gp-scrutineering.jpg</div>
+    <div class="example-file"><span class="ex-icon">◎</span> 1984_Lotus_John-Player-Special_full.jpg</div>
+    <div class="example-file"><span class="ex-icon">◎</span> 1999_BAR-Honda_Lucky-Strike_full_pit-stop.jpg</div>
+  </div>
+
+  <!-- FILENAME BUILDER -->
+  <div class="builder-wrap">
+    <div class="builder-title">Filename Builder</div>
+    <div class="builder-subtitle">Fill in the fields to generate a valid filename</div>
+
+    <div class="builder-fields">
+      <div class="field">
+        <label class="field-label" for="b-year">Year <span class="req">required</span></label>
+        <input id="b-year" type="number" min="1950" max="2009" placeholder="e.g. 1994">
+        <div class="field-hint" id="hint-year"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="b-livery">Livery type <span class="req">required</span></label>
+        <select id="b-livery">
+          <option value="">— Select —</option>
+          <option value="full">full — tobacco branding visible</option>
+          <option value="sans">sans — tobacco branding removed</option>
+        </select>
+        <div class="field-hint" id="hint-livery"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="b-constructor">Constructor <span class="req">required</span></label>
+        <input id="b-constructor" type="text" placeholder="e.g. McLaren, BAR-Honda">
+        <div class="field-hint" id="hint-constructor"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="b-brand">Tobacco brand <span class="req">required</span></label>
+        <input id="b-brand" type="text" placeholder="e.g. Marlboro, Lucky-Strike">
+        <div class="field-hint" id="hint-brand"></div>
+      </div>
+
+      <div class="field" style="grid-column:1/-1">
+        <label class="field-label" for="b-desc">Description <span class="opt">optional</span></label>
+        <input id="b-desc" type="text" placeholder="e.g. monaco-pitlane, qualifying, podium">
+        <div class="field-hint" id="hint-desc"></div>
+      </div>
+    </div>
+
+    <div class="builder-output">
+      <div class="output-filename invalid" id="output-display">Complete required fields above</div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0">
+        <span class="copy-feedback" id="copy-feedback">Copied!</span>
+        <button class="copy-btn" id="copy-btn" disabled onclick="copyFilename()">Copy Filename</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="section-eyebrow">Before You Contribute</div>
+  <div class="section-title">Copyright &amp; Rights</div>
+  <div class="copyright-note">
+    <p>
+      Only contribute photographs that you took yourself or that you have explicit permission to redistribute. Do not submit photographs scraped from news archives, wire services, or commercial photo agencies without verifying the licence.
+    </p>
+    <p>
+      By opening a pull request you confirm that you have the right to share the image under the terms of this archive. All photographs displayed on Sans Tabac remain the property of their respective creators. This site provides an index only and is not affiliated with Formula One Group, any constructor, or any tobacco company.
+    </p>
+    <p>
+      If you would like a photograph removed, open an issue on the GitHub repository with the filename and reason.
+    </p>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+// ── FILENAME BUILDER ──────────────────────────────────────────────────────
+const fields = {
+  year:        document.getElementById('b-year'),
+  constructor: document.getElementById('b-constructor'),
+  brand:       document.getElementById('b-brand'),
+  livery:      document.getElementById('b-livery'),
+  desc:        document.getElementById('b-desc'),
+};
+const hints = {
+  year:        document.getElementById('hint-year'),
+  constructor: document.getElementById('hint-constructor'),
+  brand:       document.getElementById('hint-brand'),
+  livery:      document.getElementById('hint-livery'),
+  desc:        document.getElementById('hint-desc'),
+};
+const outputEl  = document.getElementById('output-display');
+const copyBtn   = document.getElementById('copy-btn');
+const copyFb    = document.getElementById('copy-feedback');
+
+let currentFilename = '';
+
+function slugify(str) {
+  return str.trim()
+    .replace(/\s+/g, '-')       // spaces to hyphens
+    .replace(/[^a-zA-Z0-9\-]/g, '') // strip special chars
+    .replace(/-{2,}/g, '-')     // collapse double hyphens
+    .replace(/^-|-$/g, '');     // trim leading/trailing hyphens
+}
+
+function validate() {
+  const year        = fields.year.value.trim();
+  const constructor = fields.constructor.value.trim();
+  const brand       = fields.brand.value.trim();
+  const livery      = fields.livery.value;
+  const desc        = fields.desc.value.trim();
+
+  let valid = true;
+
+  // Year
+  const yearNum = parseInt(year);
+  if (!year) {
+    hints.year.textContent = ''; hints.year.classList.remove('visible');
+  } else if (isNaN(yearNum) || yearNum < 1950 || yearNum > 2009) {
+    hints.year.textContent = 'Must be a year between 1950 and 2009';
+    hints.year.classList.add('visible');
+    valid = false;
+  } else {
+    hints.year.textContent = ''; hints.year.classList.remove('visible');
+  }
+
+  // Constructor
+  if (constructor && /\s/.test(constructor)) {
+    hints.constructor.textContent = 'Use hyphens instead of spaces (e.g. BAR-Honda)';
+    hints.constructor.classList.add('visible');
+    valid = false;
+  } else {
+    hints.constructor.textContent = ''; hints.constructor.classList.remove('visible');
+  }
+
+  // Brand
+  if (brand && /\s/.test(brand)) {
+    hints.brand.textContent = 'Use hyphens instead of spaces (e.g. Lucky-Strike)';
+    hints.brand.classList.add('visible');
+    valid = false;
+  } else {
+    hints.brand.textContent = ''; hints.brand.classList.remove('visible');
+  }
+
+  // Desc
+  if (desc && /\s/.test(desc)) {
+    hints.desc.textContent = 'Use hyphens instead of spaces (e.g. monaco-pitlane)';
+    hints.desc.classList.add('visible');
+    valid = false;
+  } else {
+    hints.desc.textContent = ''; hints.desc.classList.remove('visible');
+  }
+
+  // Check required fields
+  const allRequired = year && !isNaN(yearNum) && yearNum >= 1950 && yearNum <= 2009
+    && constructor && !(/\s/.test(constructor))
+    && brand && !(/\s/.test(brand))
+    && livery;
+
+  if (!allRequired || !valid) {
+    outputEl.innerHTML = allRequired && !valid
+      ? 'Fix the errors above'
+      : 'Complete required fields above';
+    outputEl.classList.add('invalid');
+    copyBtn.disabled = true;
+    currentFilename = '';
+    return;
+  }
+
+  // Build filename
+  const parts = [year, constructor, brand, livery];
+  if (desc) parts.push(desc);
+  currentFilename = parts.join('_') + '.jpg';
+
+  // Colorized display
+  const sep = `<span class="out-sep">_</span>`;
+  let html = `<span class="out-year">${year}</span>${sep}`
+    + `<span class="out-constructor">${constructor}</span>${sep}`
+    + `<span class="out-brand">${brand}</span>${sep}`
+    + `<span class="out-livery">${livery}</span>`;
+  if (desc) html += `${sep}<span class="out-desc">${desc}</span>`;
+  html += `<span class="out-ext">.jpg</span>`;
+
+  outputEl.innerHTML = html;
+  outputEl.classList.remove('invalid');
+  copyBtn.disabled = false;
+}
+
+function copyFilename() {
+  if (!currentFilename) return;
+  navigator.clipboard.writeText(currentFilename).then(() => {
+    copyFb.classList.add('visible');
+    setTimeout(() => copyFb.classList.remove('visible'), 2000);
+  });
+}
+
+// Live input handlers — slugify on blur
+['constructor','brand','desc'].forEach(key => {
+  fields[key].addEventListener('blur', () => {
+    if (fields[key].value.trim()) {
+      fields[key].value = slugify(fields[key].value);
+    }
+    validate();
+  });
+  fields[key].addEventListener('input', validate);
+});
+fields.year.addEventListener('input', validate);
+fields.livery.addEventListener('change', validate);
+</script>
+</body>
+</html>

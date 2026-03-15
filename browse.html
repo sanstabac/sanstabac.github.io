@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse — Sans Tabac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0c0b09;--bg-card:#131209;--bg-hover:#1a1914;
+    --gold:#c4a14a;--gold-dim:#7a6228;
+    --cream:#e8e0cc;--cream-dim:#9a917c;
+    --border:rgba(196,161,74,.18);--border-bright:rgba(196,161,74,.45);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.5;}
+
+  header{border-bottom:1px solid var(--border);padding:0 4rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;background:rgba(12,11,9,.92);backdrop-filter:blur(8px);z-index:100;}
+  .header-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.15em;color:var(--gold);text-decoration:none;}
+  nav{display:flex;gap:2.5rem;align-items:center;}
+  nav a{font-family:'DM Mono',monospace;font-size:.65rem;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+  nav a:hover,nav a.active{color:var(--gold);}
+
+  .browse-header{padding:3rem 4rem 2rem;border-bottom:1px solid var(--border);}
+  .browse-crumb{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.75rem;}
+  .browse-crumb a{color:var(--gold-dim);text-decoration:none;}
+  .browse-crumb a:hover{color:var(--gold);}
+  .browse-title{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:.06em;color:var(--cream);line-height:1;}
+  .browse-count{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);margin-top:.5rem;}
+
+  /* FILTERS */
+  .filters{padding:1.5rem 4rem;border-bottom:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;align-items:center;background:var(--bg-card);}
+  .filter-group{display:flex;align-items:center;gap:.5rem;}
+  .filter-label{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);}
+  .filter-select{background:transparent;border:1px solid var(--border);color:var(--cream);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .8rem;outline:none;cursor:pointer;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
+  .filter-select:focus{border-color:var(--border-bright);}
+  option{background:#1a1914;color:var(--cream);}
+  .filter-search{background:transparent;border:1px solid var(--border);color:var(--cream);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .8rem;outline:none;width:200px;transition:border-color .2s;}
+  .filter-search::placeholder{color:var(--cream-dim);opacity:.5;}
+  .filter-search:focus{border-color:var(--border-bright);}
+  .filter-clear{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dim);background:none;border:none;cursor:pointer;padding:.4rem .6rem;transition:color .2s;margin-left:.5rem;}
+  .filter-clear:hover{color:var(--gold);}
+  .filter-chip{display:inline-flex;align-items:center;gap:.4rem;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .7rem;border:1px solid var(--border-bright);color:var(--gold);}
+  .filter-chip button{background:none;border:none;cursor:pointer;color:var(--gold-dim);font-size:.8rem;line-height:1;padding:0 0 0 .2rem;transition:color .2s;}
+  .filter-chip button:hover{color:var(--gold);}
+
+  /* GROUP VIEW (by constructor/year/brand) */
+  .group-view{padding:0;}
+  .group-section{border-bottom:1px solid var(--border);}
+  .group-heading{padding:2rem 4rem 1.5rem;display:flex;align-items:baseline;gap:1.5rem;cursor:pointer;user-select:none;}
+  .group-heading-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;color:var(--cream);}
+  .group-heading-meta{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim);}
+  .group-heading-count{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--gold-dim);margin-left:auto;}
+  .group-grid-wrap{padding:0 4rem 2rem;}
+
+  /* FLAT GRID */
+  .flat-view{padding:2rem 4rem;}
+
+  /* LIGHTBOX */
+  .lightbox{position:fixed;inset:0;background:rgba(12,11,9,.96);z-index:500;display:none;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out;}
+  .lightbox.open{display:flex;}
+  .lightbox-inner{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;gap:1rem;}
+  .lightbox img{max-width:100%;max-height:80vh;object-fit:contain;display:block;}
+  .lightbox-meta{display:flex;gap:1.5rem;align-items:baseline;}
+  .lightbox-year{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);letter-spacing:.04em;}
+  .lightbox-info{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim);}
+  .lightbox-desc{font-size:.9rem;color:var(--cream-dim);font-weight:300;}
+  .lightbox-close{position:absolute;top:-2rem;right:0;background:none;border:none;color:var(--cream-dim);font-size:1.5rem;cursor:pointer;line-height:1;transition:color .2s;}
+  .lightbox-close:hover{color:var(--gold);}
+  .lightbox-badge{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .5rem;border:1px solid;}
+  .lb-full{color:var(--gold);border-color:var(--gold);}
+  .lb-sans{color:var(--cream-dim);border-color:var(--cream-dim);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .browse-header{animation:fadeUp .6s ease both;}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="header-logo">Sans Tabac</a>
+  <nav>
+    <a href="browse.html?group=constructor">Constructors</a>
+    <a href="browse.html?group=year">By Year</a>
+    <a href="browse.html?group=brand">Brands</a>
+    <a href="browse.html?livery=sans">Sans Tabac Only</a>
+    <a href="browse.html" class="active">All Photos</a>
+  </nav>
+</header>
+
+<div class="browse-header">
+  <div class="browse-crumb"><a href="index.html">Sans Tabac</a> / <span id="crumb-current">Browse</span></div>
+  <div class="browse-title" id="page-title">Archive</div>
+  <div class="browse-count" id="page-count">Loading…</div>
+</div>
+
+<div class="filters" id="filters">
+  <div class="filter-group">
+    <span class="filter-label">Constructor</span>
+    <select class="filter-select" id="f-constructor"><option value="">All</option></select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Year</span>
+    <select class="filter-select" id="f-year"><option value="">All</option></select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Brand</span>
+    <select class="filter-select" id="f-brand"><option value="">All</option></select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Livery</span>
+    <select class="filter-select" id="f-livery">
+      <option value="">All</option>
+      <option value="full">Full Livery</option>
+      <option value="sans">Sans Tabac</option>
+    </select>
+  </div>
+  <input class="filter-search" id="f-search" type="text" placeholder="Search…">
+  <button class="filter-clear" id="clear-btn">Clear Filters</button>
+</div>
+
+<div id="results"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lb-img" src="" alt="">
+    <div class="lightbox-meta">
+      <span class="lightbox-year" id="lb-year"></span>
+      <span class="lightbox-info" id="lb-info"></span>
+      <span class="lightbox-badge" id="lb-badge"></span>
+    </div>
+    <div class="lightbox-desc" id="lb-desc"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+SansTabac.injectCardStyles();
+const base = SansTabac.getBase();
+
+// CSS override for grid inside browse page padding
+document.head.insertAdjacentHTML("beforeend", `<style>
+  .flat-view .photo-grid { border-left: none; border-right: none; }
+  .group-grid-wrap .photo-grid { border-left: none; border-right: none; }
+</style>`);
+
+let allPhotos = [];
+let currentParams = {};
+
+// ── LIGHTBOX ──────────────────────────────────────────────────────────────
+function openLightbox(photo) {
+  document.getElementById("lb-img").src = base + photo.file;
+  document.getElementById("lb-img").alt = [photo.year, photo.constructor, photo.description].filter(Boolean).join(" · ");
+  document.getElementById("lb-year").textContent = photo.year;
+  document.getElementById("lb-info").textContent = [photo.constructor, photo.brand].join(" · ");
+  document.getElementById("lb-desc").textContent = photo.description || "";
+  const badge = document.getElementById("lb-badge");
+  badge.textContent = photo.livery === "sans" ? "Sans Tabac" : "Full Livery";
+  badge.className = "lightbox-badge " + (photo.livery === "sans" ? "lb-sans" : "lb-full");
+  document.getElementById("lightbox").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById("lightbox") && !e.target.classList.contains("lightbox-close")) return;
+  document.getElementById("lightbox").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeLightbox({target: document.getElementById("lightbox")}); });
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function renderCard(photo) {
+  const desc = [photo.year, photo.constructor, photo.description].filter(Boolean).join(" · ");
+  const tc = SansTabac.teamColor(photo.constructor);
+  return `<article class="photo-card" onclick="openLightbox(window.__photos['${photo.id}'])">
+    <div class="photo-card-img-wrap">
+      <img src="${base}${photo.file}" alt="${desc}" loading="lazy"
+        onerror="this.parentElement.classList.add('img-error');this.remove()">
+      <div class="photo-card-livery ${photo.livery==='sans'?'badge-sans':'badge-full'}">
+        ${photo.livery==='sans'?'Sans Tabac':'Full Livery'}
+      </div>
+    </div>
+    <div class="photo-card-meta">
+      <div class="photo-card-primary">
+        <span class="photo-card-year">${photo.year}</span>
+        <span class="photo-card-constructor" style="--tc:${tc}">${photo.constructor}</span>
+      </div>
+      <div class="photo-card-brand">${photo.brand}</div>
+      ${photo.description?`<div class="photo-card-desc">${photo.description}</div>`:''}
+    </div>
+  </article>`;
+}
+
+function renderGrid(photos, container) {
+  if (!photos.length) {
+    container.innerHTML = `<div style="padding:4rem;text-align:center;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);opacity:.5">No photographs match these filters</div>`;
+    return;
+  }
+  container.innerHTML = `<div class="photo-grid">${photos.map(renderCard).join("")}</div>`;
+}
+
+function renderGrouped(photos, groupKey, wrapper) {
+  const groups = SansTabac.groupBy(photos, groupKey);
+  const sorted = Object.entries(groups).sort((a, b) => {
+    if (groupKey === "year") return b[0] - a[0];
+    return b[1].length - a[1].length;
+  });
+
+  if (!sorted.length) {
+    wrapper.innerHTML = `<div style="padding:4rem;text-align:center;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);opacity:.5">No photographs in archive yet</div>`;
+    return;
+  }
+
+  wrapper.innerHTML = sorted.map(([key, ps]) => `
+    <div class="group-section">
+      <div class="group-heading" onclick="toggleGroup(this)">
+        <div class="group-heading-title">${key}</div>
+        <div class="group-heading-meta">${[...new Set(ps.map(p => groupKey==='brand'?p.constructor:p.brand))].slice(0,3).join(', ')}</div>
+        <div class="group-heading-count">${ps.length} photo${ps.length!==1?'s':''}</div>
+      </div>
+      <div class="group-grid-wrap">
+        <div class="photo-grid">${ps.map(renderCard).join("")}</div>
+      </div>
+    </div>`).join("");
+}
+
+function toggleGroup(headingEl) {
+  const wrap = headingEl.nextElementSibling;
+  wrap.style.display = wrap.style.display === "none" ? "" : "none";
+}
+
+// ── TITLE / CRUMB ─────────────────────────────────────────────────────────
+function buildTitle(params) {
+  if (params.constructor) return { title: params.constructor, crumb: "By Constructor" };
+  if (params.year) return { title: params.year, crumb: "By Season" };
+  if (params.brand) return { title: params.brand, crumb: "By Brand" };
+  if (params.livery === "sans") return { title: "Sans Tabac", crumb: "By Livery Type" };
+  if (params.livery === "full") return { title: "Full Livery", crumb: "By Livery Type" };
+  if (params.q) return { title: `"${params.q}"`, crumb: "Search Results" };
+  const groupLabels = { constructor: "By Constructor", year: "By Season", brand: "By Brand" };
+  if (params.group) return { title: groupLabels[params.group] || "Browse", crumb: "Browse" };
+  return { title: "Archive", crumb: "Browse" };
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────
+function populateSelect(id, values, current) {
+  const el = document.getElementById(id);
+  const opts = values.map(v => `<option value="${v}" ${String(v)===String(current)?'selected':''}>${v}</option>`).join("");
+  el.innerHTML = `<option value="">All</option>${opts}`;
+}
+
+function applyFilters() {
+  const params = {
+    constructor: document.getElementById("f-constructor").value,
+    year: document.getElementById("f-year").value,
+    brand: document.getElementById("f-brand").value,
+    livery: document.getElementById("f-livery").value,
+    q: document.getElementById("f-search").value,
+    group: currentParams.group || "",
+  };
+  const url = new URL(window.location);
+  Object.entries(params).forEach(([k,v]) => v ? url.searchParams.set(k,v) : url.searchParams.delete(k));
+  window.history.replaceState({}, "", url);
+  render(allPhotos, params);
+}
+
+["f-constructor","f-year","f-brand","f-livery"].forEach(id => {
+  document.getElementById(id).addEventListener("change", applyFilters);
+});
+document.getElementById("f-search").addEventListener("input", applyFilters);
+document.getElementById("clear-btn").addEventListener("click", () => {
+  ["f-constructor","f-year","f-brand","f-livery"].forEach(id => document.getElementById(id).value="");
+  document.getElementById("f-search").value = "";
+  applyFilters();
+});
+
+// ── MAIN RENDER ───────────────────────────────────────────────────────────
+function render(photos, params) {
+  const filtered = SansTabac.filter(photos, params);
+  const { title, crumb } = buildTitle(params);
+  document.getElementById("page-title").textContent = title;
+  document.getElementById("crumb-current").textContent = crumb;
+  document.title = `${title} — Sans Tabac`;
+  document.getElementById("page-count").textContent = `${filtered.length} photograph${filtered.length!==1?"s":""}`;
+
+  const resultsEl = document.getElementById("results");
+
+  if (params.group && !params.constructor && !params.year && !params.brand && !params.livery && !params.q) {
+    resultsEl.className = "group-view";
+    renderGrouped(filtered, params.group, resultsEl);
+  } else {
+    resultsEl.className = "flat-view";
+    renderGrid(filtered, resultsEl);
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+async function init() {
+  allPhotos = await SansTabac.loadPhotos();
+
+  // Index for lightbox access
+  window.__photos = {};
+  allPhotos.forEach(p => { window.__photos[p.id] = p; });
+
+  currentParams = SansTabac.getParams();
+  const urlParams = new URLSearchParams(window.location.search);
+  currentParams.group = urlParams.get("group") || "";
+
+  // Populate filter dropdowns
+  populateSelect("f-constructor", SansTabac.uniqueValues(allPhotos, "constructor"), currentParams.constructor);
+  populateSelect("f-year", SansTabac.uniqueValues(allPhotos, "year").sort((a,b)=>b-a), currentParams.year);
+  populateSelect("f-brand", SansTabac.uniqueValues(allPhotos, "brand"), currentParams.brand);
+  document.getElementById("f-livery").value = currentParams.livery || "";
+  document.getElementById("f-search").value = currentParams.q || "";
+
+  render(allPhotos, currentParams);
+}
+
+init().catch(console.error);
+</script>
+</body>
+</html>

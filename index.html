@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SANS TABAC :: F1 Tobacco Livery Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  /* ── RESET + BASE ─────────────────────────────────────────── */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #000011;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,40,80,.15) 2px, rgba(0,40,80,.15) 4px);
+    color: #d0d8ff;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+  a          { color: #00e5ff; }
+  a:visited  { color: #cc88ff; }
+  a:hover    { color: #ffff00; text-decoration: none; }
+  a:active   { color: #ff4444; }
+
+  /* ── ANIMATED MARQUEE STRIP ───────────────────────────────── */
+  .marquee-strip {
+    background: #000;
+    border-top: 2px solid #ff0;
+    border-bottom: 2px solid #ff0;
+    padding: 4px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: scroll-left 30s linear infinite;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: #ffff00;
+    letter-spacing: .12em;
+  }
+  @keyframes scroll-left {
+    0%   { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* ── HEADER ──────────────────────────────────────────────── */
+  .site-header {
+    background: linear-gradient(180deg, #000 0%, #001133 100%);
+    border-bottom: 3px solid #ff3300;
+    padding: 16px 20px 12px;
+    text-align: center;
+    position: relative;
+  }
+  .site-title {
+    font-family: 'VT323', monospace;
+    font-size: clamp(44px, 9vw, 88px);
+    line-height: 1;
+    color: #ffff00;
+    text-shadow: 3px 3px 0 #cc0000, 0 0 30px rgba(255,255,0,.4);
+    letter-spacing: .08em;
+  }
+  .site-title span { color: #ff4444; }
+  .site-subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #00e5ff;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .header-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .badge-img {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: .1em;
+    border: 2px outset #888;
+    color: #000;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .badge-img:hover { border-style: inset; color: #000; }
+  .b-new   { background: #ff0; color: #000; }
+  .b-cool  { background: #00e5ff; color: #000; }
+  .b-warn  { background: #ff4400; color: #fff; }
+  .b-note  { background: #cc88ff; color: #000; }
+
+  /* ── BLINK ───────────────────────────────────────────────── */
+  .blink {
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── RAINBOW RULE ────────────────────────────────────────── */
+  .rainbow-rule {
+    height: 5px;
+    background: linear-gradient(90deg,
+      #ff0000,#ff8800,#ffff00,#00ff00,#00ffff,#0088ff,#8800ff,#ff00ff,#ff0000);
+    border: none;
+    margin: 0;
+  }
+
+  /* ── NAV BAR ─────────────────────────────────────────────── */
+  .nav-bar {
+    background: #111133;
+    border-bottom: 2px solid #334;
+    padding: 6px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+  }
+  .nav-btn {
+    display: inline-block;
+    padding: 4px 12px;
+    font-family: 'VT323', monospace;
+    font-size: 17px;
+    letter-spacing: .1em;
+    border: 2px outset #6677aa;
+    background: #223;
+    color: #aaccff;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: none;
+  }
+  .nav-btn:hover {
+    background: #334;
+    border-style: inset;
+    color: #ffff00;
+  }
+  .nav-btn:visited { color: #aaccff; }
+
+  /* ── MAIN LAYOUT (genuine table layout) ──────────────────── */
+  .main-table {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .layout-td { padding: 0; vertical-align: top; }
+
+  /* ── SECTION HEADERS ─────────────────────────────────────── */
+  .section-hdr {
+    background: linear-gradient(90deg, #220044, #000033 60%, #220044);
+    border-top: 2px solid #6644aa;
+    border-bottom: 1px solid #443366;
+    padding: 6px 14px;
+    margin: 0;
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    color: #cc88ff;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-hdr::before { content: '▶'; color: #ffff00; font-size: 14px; }
+
+  /* ── SUNKEN BOX ──────────────────────────────────────────── */
+  .sunken {
+    border: 2px inset #556;
+    background: #050510;
+    padding: 12px 16px;
+  }
+  .raised {
+    border: 2px outset #667;
+    background: #0a0a22;
+    padding: 12px 16px;
+  }
+
+  /* ── COUNTER + STATUS ────────────────────────────────────── */
+  .status-bar {
+    background: #060614;
+    border: 2px inset #334;
+    padding: 8px 16px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: #778899;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .counter-display {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #00ff88;
+    background: #001100;
+    border: 2px inset #004400;
+    padding: 2px 10px;
+    letter-spacing: .2em;
+  }
+
+  /* ── STATS TABLE ─────────────────────────────────────────── */
+  .stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+  }
+  .stats-table td {
+    padding: 5px 8px;
+    border-bottom: 1px dotted #334;
+    vertical-align: middle;
+  }
+  .stats-table .stat-num {
+    color: #ffff00;
+    font-size: 22px;
+    text-align: right;
+    width: 50px;
+  }
+  .stats-table .stat-lbl { color: #99aacc; letter-spacing: .1em; }
+
+  /* ── SIDEBAR ──────────────────────────────────────────────── */
+  .sidebar {
+    width: 200px;
+    min-width: 200px;
+    padding: 0 0 0 12px;
+  }
+  .sidebar-block {
+    margin-bottom: 16px;
+  }
+  .sidebar-title {
+    font-family: 'VT323', monospace;
+    font-size: 17px;
+    color: #ffaa00;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #443;
+    padding-bottom: 3px;
+    margin-bottom: 6px;
+  }
+  .sidebar-list {
+    list-style: none;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .sidebar-list li::before { content: '» '; color: #ffff00; }
+  .sidebar-list a { color: #88ccff; font-size: 13px; }
+
+  /* ── LIVERY TYPE BOXES ───────────────────────────────────── */
+  .livery-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+  }
+  .livery-box {
+    display: block;
+    border: 2px outset #667;
+    background: #080820;
+    padding: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: none;
+  }
+  .livery-box:hover {
+    border-style: inset;
+    background: #0c0c30;
+  }
+  .livery-box-label {
+    font-family: 'VT323', monospace;
+    font-size: 28px;
+    letter-spacing: .06em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .livery-box-desc {
+    font-size: 12px;
+    color: #8899bb;
+    line-height: 1.4;
+  }
+  .livery-box-count {
+    font-family: 'VT323', monospace;
+    font-size: 38px;
+    display: block;
+    margin-top: 8px;
+  }
+  .box-full .livery-box-label { color: #ffcc00; }
+  .box-full .livery-box-count { color: #ffcc00; }
+  .box-sans .livery-box-label { color: #00e5ff; }
+  .box-sans .livery-box-count { color: #00e5ff; }
+
+  /* ── YEAR GRID ───────────────────────────────────────────── */
+  .year-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 12px;
+  }
+  .year-btn {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    padding: 3px 10px;
+    border: 2px outset #445566;
+    background: #0a1020;
+    color: #88aadd;
+    text-decoration: none;
+    letter-spacing: .08em;
+    min-width: 52px;
+    text-align: center;
+  }
+  .year-btn:hover { border-style: inset; color: #ffff00; background: #0f1530; }
+  .year-btn:visited { color: #88aadd; }
+  .year-btn.has-photos { color: #aaccff; background: #0c1530; }
+  .year-btn.has-photos:hover { color: #ffff00; }
+
+  /* ── CONSTRUCTOR / BRAND TABLE ───────────────────────────── */
+  .entity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .entity-table tr { border-bottom: 1px dotted #223; }
+  .entity-table tr:hover { background: #080818; }
+  .entity-table td { padding: 5px 10px; vertical-align: middle; }
+  .entity-name a {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: #aaccff;
+    text-decoration: none;
+    letter-spacing: .06em;
+  }
+  .entity-name a:hover { color: #ffff00; }
+  .entity-count {
+    text-align: right;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: #556688;
+    width: 60px;
+  }
+  .entity-count span { color: #ffff00; }
+  .entity-swatch {
+    width: 8px;
+    padding: 0;
+  }
+  .entity-swatch-bar {
+    width: 6px;
+    min-height: 20px;
+    border-radius: 1px;
+  }
+  .entity-meta {
+    color: #556677;
+    font-size: 12px;
+  }
+  .entity-empty {
+    padding: 16px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: #334455;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  /* ── LOADING STATE ───────────────────────────────────────── */
+  .loading-msg {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: #446688;
+    padding: 20px;
+    letter-spacing: .1em;
+  }
+
+  /* ── GUESTBOOK / WEB RING ────────────────────────────────── */
+  .webring-bar {
+    background: #040410;
+    border-top: 2px solid #223;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #445566;
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    letter-spacing: .1em;
+  }
+  .webring-bar a { color: #667788; }
+  .webring-bar a:hover { color: #99aacc; }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  .site-footer {
+    background: #000;
+    border-top: 3px solid #ff3300;
+    padding: 14px 20px;
+    text-align: center;
+  }
+  .footer-text {
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: #445566;
+    letter-spacing: .12em;
+    line-height: 1.8;
+  }
+  .footer-text a { color: #556688; }
+
+  /* ── CONTENT WRAPPER ─────────────────────────────────────── */
+  .content-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 12px 16px;
+  }
+  .main-columns {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+  }
+  .main-content { flex: 1; min-width: 0; }
+
+  /* ── MISC ────────────────────────────────────────────────── */
+  .star { color: #ffff00; }
+  .hr-thick {
+    border: none;
+    border-top: 3px double #334455;
+    margin: 10px 0;
+  }
+  .welcome-text {
+    color: #aabbcc;
+    font-size: 14px;
+    line-height: 1.65;
+    padding: 10px 14px;
+  }
+  .welcome-text strong { color: #ffdd88; }
+  .welcome-text em { color: #00e5ff; font-style: normal; }
+  .uc-notice {
+    display: inline-block;
+    background: #330000;
+    border: 2px solid #ff4400;
+    color: #ff9944;
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    letter-spacing: .1em;
+    padding: 2px 8px;
+    text-transform: uppercase;
+  }
+  @media (max-width: 680px) {
+    .sidebar { display: none; }
+    .livery-boxes { grid-template-columns: 1fr; }
+    .entity-table .entity-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <span class="marquee-inner">
+    &nbsp;&nbsp;&nbsp;
+    ★ SANS TABAC — THE FORMULA ONE TOBACCO LIVERY ARCHIVE ★
+    &nbsp;&nbsp;&nbsp;★&nbsp;
+    MARLBORO · CAMEL · JOHN PLAYER SPECIAL · ROTHMANS · WEST · LUCKY STRIKE · GITANES
+    &nbsp;&nbsp;&nbsp;★&nbsp;
+    FORMULA ONE 1984–2005 · FULL AND SANS TABAC LIVERIES DOCUMENTED
+    &nbsp;&nbsp;&nbsp;★&nbsp;
+    SANS TABAC — THE FORMULA ONE TOBACCO LIVERY ARCHIVE ★
+    &nbsp;&nbsp;&nbsp;
+  </span>
+</div>
+
+<!-- HEADER -->
+<div class="site-header">
+  <div class="site-title">SANS<span>::</span>TABAC</div>
+  <div class="site-subtitle">Formula One Tobacco Livery Archive &mdash; 1984 to 2005</div>
+  <div class="header-badges">
+    <span class="badge-img b-new blink">★ UPDATED</span>
+    <span class="badge-img b-cool">NETSCAPE ENHANCED</span>
+    <span class="badge-img b-warn">TOBACCO CONTENT</span>
+    <span class="badge-img b-note">BEST @ 800×600</span>
+  </div>
+</div>
+
+<hr class="rainbow-rule">
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <a href="index.html"          class="nav-btn">[ HOME ]</a>
+  <a href="browse.html"         class="nav-btn">[ ALL PHOTOS ]</a>
+  <a href="browse.html?group=constructor" class="nav-btn">[ BY TEAM ]</a>
+  <a href="browse.html?group=year"        class="nav-btn">[ BY YEAR ]</a>
+  <a href="browse.html?group=brand"       class="nav-btn">[ BY BRAND ]</a>
+  <a href="browse.html?livery=sans"       class="nav-btn">[ SANS TABAC ]</a>
+  <a href="browse.html?livery=full"       class="nav-btn">[ FULL LIVERY ]</a>
+  <a href="contribute.html"     class="nav-btn">[ CONTRIBUTE ]</a>
+</div>
+
+<hr class="rainbow-rule">
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <span>
+    <span class="star">★</span>
+    YOU ARE VISITOR NUMBER:
+    <span class="counter-display" id="counter">0000000</span>
+  </span>
+  <span>
+    <span class="uc-notice">⚙ SITE UNDER CONSTRUCTION ⚙</span>
+  </span>
+  <span>
+    LAST UPDATED: <strong id="last-updated" style="color:#aabbcc">—</strong>
+  </span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content-wrap">
+  <div class="main-columns">
+
+    <!-- PRIMARY CONTENT -->
+    <div class="main-content">
+
+      <!-- WELCOME -->
+      <div class="section-hdr">WELCOME TO THE ARCHIVE</div>
+      <div class="sunken">
+        <div class="welcome-text">
+          Welcome, racing fan!
+          This site documents the <strong>tobacco liveries of Formula One</strong>, covering the era from <em>1984</em> to <em>2005</em> when cigarette brands ran the sport.
+          <br><br>
+          When grands prix moved to countries with advertising bans — <strong>France, Germany, Canada</strong> — the cars appeared transformed: logos blanked, colours shifted, identities obscured. We call these the <em>Sans Tabac</em> liveries.
+          <br><br>
+          <strong>Marlboro. Camel. JPS. Rothmans. West. Lucky Strike.</strong>
+          The brands that defined an era. Both versions are documented here.
+          <br><br>
+          <span style="color:#ffdd88">Use the navigation above or browse the sections below.
+          Click any team, year, or brand to see photos.</span>
+        </div>
+      </div>
+      <div style="height:10px"></div>
+
+      <!-- STATS -->
+      <div class="section-hdr">ARCHIVE STATISTICS</div>
+      <div class="raised" id="stats-area">
+        <div class="loading-msg">Loading archive data<span class="blink">_</span></div>
+      </div>
+      <div style="height:10px"></div>
+
+      <!-- LIVERY TYPE -->
+      <div class="section-hdr">BROWSE BY LIVERY TYPE</div>
+      <div class="sunken">
+        <div class="livery-boxes">
+          <a href="browse.html?livery=full" class="livery-box box-full">
+            <span class="livery-box-label">FULL LIVERY</span>
+            <span class="livery-box-desc">Cars with tobacco branding visible — the original, intended liveries as raced in permitted countries.</span>
+            <span class="livery-box-count" id="count-full">—</span>
+            <span style="font-family:'VT323',monospace;font-size:14px;color:#665522;letter-spacing:.1em">PHOTOGRAPHS</span>
+          </a>
+          <a href="browse.html?livery=sans" class="livery-box box-sans">
+            <span class="livery-box-label">SANS TABAC</span>
+            <span class="livery-box-desc">Cars as they appeared where advertising bans required teams to obscure all tobacco markings.</span>
+            <span class="livery-box-count" id="count-sans">—</span>
+            <span style="font-family:'VT323',monospace;font-size:14px;color:#004455;letter-spacing:.1em">PHOTOGRAPHS</span>
+          </a>
+        </div>
+      </div>
+      <div style="height:10px"></div>
+
+      <!-- BY YEAR -->
+      <div class="section-hdr">BROWSE BY SEASON</div>
+      <div class="sunken">
+        <div class="year-grid" id="year-grid">
+          <div class="loading-msg">Loading<span class="blink">_</span></div>
+        </div>
+      </div>
+      <div style="height:10px"></div>
+
+      <!-- BY CONSTRUCTOR (two columns) -->
+      <div class="section-hdr">BROWSE BY CONSTRUCTOR</div>
+      <div class="sunken" id="constructor-area">
+        <div class="loading-msg">Loading<span class="blink">_</span></div>
+      </div>
+      <div style="height:10px"></div>
+
+      <!-- BY BRAND -->
+      <div class="section-hdr">BROWSE BY TOBACCO BRAND</div>
+      <div class="sunken" id="brand-area">
+        <div class="loading-msg">Loading<span class="blink">_</span></div>
+      </div>
+      <div style="height:10px"></div>
+
+    </div><!-- /main-content -->
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div class="sidebar-block raised">
+        <div class="sidebar-title">★ NAVIGATE</div>
+        <ul class="sidebar-list">
+          <li><a href="browse.html">All Photos</a></li>
+          <li><a href="browse.html?group=constructor">By Constructor</a></li>
+          <li><a href="browse.html?group=year">By Season</a></li>
+          <li><a href="browse.html?group=brand">By Brand</a></li>
+          <li><a href="browse.html?livery=sans">Sans Tabac Only</a></li>
+          <li><a href="browse.html?livery=full">Full Livery Only</a></li>
+          <li><a href="contribute.html">Contribute a Photo</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-block raised">
+        <div class="sidebar-title">▲ TOP TEAMS</div>
+        <div id="sidebar-teams"><div style="color:#334;font-family:'VT323',monospace;font-size:14px;padding:6px">Loading…</div></div>
+      </div>
+
+      <div class="sidebar-block raised">
+        <div class="sidebar-title">★ TOP BRANDS</div>
+        <div id="sidebar-brands"><div style="color:#334;font-family:'VT323',monospace;font-size:14px;padding:6px">Loading…</div></div>
+      </div>
+
+      <div class="sidebar-block raised" style="text-align:center">
+        <div class="sidebar-title">☆ SITE INFO</div>
+        <div style="font-family:'VT323',monospace;font-size:14px;color:#556677;line-height:1.8;padding:4px">
+          Static archive<br>
+          GitHub Pages<br>
+          Est. 2025<br>
+          <br>
+          <a href="https://github.com/sanstabac/sanstabac.github.io" style="font-size:13px">[ SOURCE CODE ]</a>
+        </div>
+      </div>
+
+      <div class="sidebar-block" style="text-align:center;padding:8px">
+        <div style="border:2px outset #667;background:#050520;padding:8px;font-family:'VT323',monospace;font-size:12px;color:#334455;line-height:1.6">
+          <div style="color:#ffff00;font-size:15px;margin-bottom:4px">88×31</div>
+          sans-tabac.github.io<br>
+          F1 TOBACCO<br>
+          LIVERY ARCHIVE<br>
+          <div style="color:#ff4400;margin-top:4px">[ LINK US ]</div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+  </div><!-- /main-columns -->
+</div><!-- /content-wrap -->
+
+<!-- WEBRING BAR -->
+<div class="webring-bar">
+  &laquo;&nbsp;
+  <a href="#">PREV SITE</a>
+  &nbsp;::&nbsp;
+  <a href="#">F1 ARCHIVES WEB RING</a>
+  &nbsp;::&nbsp;
+  <a href="#">RANDOM</a>
+  &nbsp;::&nbsp;
+  <a href="#">NEXT SITE</a>
+  &nbsp;&raquo;
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="contribute.html">[ SIGN GUESTBOOK ]</a>
+  &nbsp;&nbsp;
+  <a href="#">[ ADD TO FAVORITES ]</a>
+</div>
+
+<!-- FOOTER -->
+<div class="site-footer">
+  <div class="footer-text">
+    SANS TABAC &mdash; AN INDEPENDENT F1 TOBACCO LIVERY ARCHIVE<br>
+    All photographs credited to their respective owners.
+    Not affiliated with Formula One Group, any constructor, or any tobacco company.<br>
+    <a href="contribute.html">Contribute a Photo</a>
+    &nbsp;·&nbsp;
+    <a href="browse.html">Browse Archive</a>
+    &nbsp;·&nbsp;
+    <a href="#">About This Site</a>
+    <br><br>
+    <span class="blink">★</span>
+    BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 AT 800×600 RESOLUTION
+    <span class="blink">★</span>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+// Fake visitor counter
+const base = parseInt(localStorage.getItem('st-counter') || String(Math.floor(Math.random() * 40000) + 10000));
+localStorage.setItem('st-counter', String(base + 1));
+document.getElementById('counter').textContent = String(base + 1).padStart(7, '0');
+
+// Last updated
+const now = new Date();
+document.getElementById('last-updated').textContent =
+  now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+
+// Team colors matching app.js
+const TEAM_COLORS = {
+  "Ferrari":"#e8002d","McLaren":"#ff8000","Williams":"#005aff","Lotus":"#c8a800",
+  "Benetton":"#0090ff","BAR Honda":"#dc0000","Jordan":"#f0a800","Tyrrell":"#0070c0",
+  "Renault":"#ffd700","Arrows":"#f80","Minardi":"#555","Prost":"#1a7a3c",
+  "Ligier":"#2060c8","Brabham":"#1a5c1a","Sauber":"#c0c0c0","Stewart":"#c8a020",
+  "Jaguar":"#007f50","Toyota":"#cc0000","Honda":"#c00020",
+};
+
+async function init() {
+  const photos = await SansTabac.loadPhotos();
+  const s = SansTabac.stats(photos);
+
+  // Stats block
+  const statsEl = document.getElementById('stats-area');
+  statsEl.innerHTML = `
+    <table class="stats-table">
+      <tr><td class="stat-lbl">TOTAL PHOTOGRAPHS</td><td class="stat-num">${s.total}</td></tr>
+      <tr><td class="stat-lbl">FULL LIVERY</td><td class="stat-num">${s.full}</td></tr>
+      <tr><td class="stat-lbl">SANS TABAC</td><td class="stat-num">${s.sans}</td></tr>
+      <tr><td class="stat-lbl">CONSTRUCTORS</td><td class="stat-num">${s.constructors}</td></tr>
+      <tr><td class="stat-lbl">TOBACCO BRANDS</td><td class="stat-num">${s.brands}</td></tr>
+      <tr><td class="stat-lbl">SEASONS COVERED</td><td class="stat-num">${s.years.length}</td></tr>
+    </table>`;
+
+  // Livery counts
+  document.getElementById('count-full').textContent = s.full || '—';
+  document.getElementById('count-sans').textContent = s.sans || '—';
+
+  // Year grid — all years 1984–2005, highlighted if have photos
+  const yearPhotos = SansTabac.groupBy(photos, 'year');
+  const yearGrid = document.getElementById('year-grid');
+  if (photos.length === 0) {
+    // Show all years as empty placeholders
+    yearGrid.innerHTML = Array.from({length: 22}, (_, i) => {
+      const y = 1984 + i;
+      return `<a href="browse.html?year=${y}" class="year-btn">${y}</a>`;
+    }).join('');
+  } else {
+    yearGrid.innerHTML = Object.keys(yearPhotos).sort().map(y =>
+      `<a href="browse.html?year=${y}" class="year-btn has-photos" title="${yearPhotos[y].length} photo${yearPhotos[y].length!==1?'s':''}">${y}</a>`
+    ).join('');
+  }
+
+  // Constructor table
+  const byConstructor = SansTabac.groupBy(photos, 'constructor');
+  const sortedC = Object.entries(byConstructor).sort((a,b) => b[1].length - a[1].length);
+  const constrEl = document.getElementById('constructor-area');
+  if (!sortedC.length) {
+    constrEl.innerHTML = `<div class="entity-empty">NO PHOTOS IN ARCHIVE YET — ADD IMAGES TO photos/ TO GET STARTED</div>`;
+  } else {
+    // Two-column table
+    const rows = sortedC.map(([name, ps]) => {
+      const color = TEAM_COLORS[name] || '#c4a14a';
+      const brands = [...new Set(ps.map(p => p.brand))].slice(0,2).join(', ');
+      const ymin = Math.min(...ps.map(p=>p.year));
+      const ymax = Math.max(...ps.map(p=>p.year));
+      return `<tr>
+        <td class="entity-swatch"><div class="entity-swatch-bar" style="background:${color}"></div></td>
+        <td class="entity-name"><a href="browse.html?constructor=${encodeURIComponent(name)}">${name}</a></td>
+        <td class="entity-meta">${brands} &middot; ${ymin}–${ymax}</td>
+        <td class="entity-count"><span>${ps.length}</span> photo${ps.length!==1?'s':''}</td>
+      </tr>`;
+    }).join('');
+    constrEl.innerHTML = `<table class="entity-table"><tbody>${rows}</tbody></table>`;
+  }
+
+  // Brand table
+  const byBrand = SansTabac.groupBy(photos, 'brand');
+  const sortedB = Object.entries(byBrand).sort((a,b) => b[1].length - a[1].length);
+  const brandEl = document.getElementById('brand-area');
+  if (!sortedB.length) {
+    brandEl.innerHTML = `<div class="entity-empty">BRANDS WILL APPEAR HERE ONCE PHOTOS ARE ADDED</div>`;
+  } else {
+    const rows = sortedB.map(([brand, ps]) => {
+      const teams = [...new Set(ps.map(p => p.constructor))].slice(0,3).join(', ');
+      const ymin = Math.min(...ps.map(p=>p.year));
+      const ymax = Math.max(...ps.map(p=>p.year));
+      return `<tr>
+        <td class="entity-name"><a href="browse.html?brand=${encodeURIComponent(brand)}">${brand}</a></td>
+        <td class="entity-meta">${teams} &middot; ${ymin}–${ymax}</td>
+        <td class="entity-count"><span>${ps.length}</span> photo${ps.length!==1?'s':''}</td>
+      </tr>`;
+    }).join('');
+    brandEl.innerHTML = `<table class="entity-table"><tbody>${rows}</tbody></table>`;
+  }
+
+  // Sidebar teams (top 6)
+  const sideTeams = document.getElementById('sidebar-teams');
+  if (!sortedC.length) {
+    sideTeams.innerHTML = `<div style="color:#334;font-family:'VT323',monospace;font-size:13px;padding:6px">No photos yet</div>`;
+  } else {
+    sideTeams.innerHTML = `<ul class="sidebar-list">${
+      sortedC.slice(0,6).map(([name,ps]) =>
+        `<li><a href="browse.html?constructor=${encodeURIComponent(name)}">${name}</a> <span style="color:#445566;font-size:11px">(${ps.length})</span></li>`
+      ).join('')
+    }</ul>`;
+  }
+
+  // Sidebar brands (top 6)
+  const sideBrands = document.getElementById('sidebar-brands');
+  if (!sortedB.length) {
+    sideBrands.innerHTML = `<div style="color:#334;font-family:'VT323',monospace;font-size:13px;padding:6px">No photos yet</div>`;
+  } else {
+    sideBrands.innerHTML = `<ul class="sidebar-list">${
+      sortedB.slice(0,6).map(([brand,ps]) =>
+        `<li><a href="browse.html?brand=${encodeURIComponent(brand)}">${brand}</a> <span style="color:#445566;font-size:11px">(${ps.length})</span></li>`
+      ).join('')
+    }</ul>`;
+  }
+}
+
+init().catch(err => {
+  document.getElementById('stats-area').innerHTML =
+    `<div class="entity-empty">ERROR LOADING ARCHIVE DATA: ${err.message}</div>`;
+});
+</script>
+</body>
+</html>
