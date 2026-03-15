@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo — Sans Tabac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0c0b09; --bg-card:#131209; --bg-hover:#1a1914;
+    --gold:#c4a14a; --gold-dim:#7a6228;
+    --cream:#e8e0cc; --cream-dim:#9a917c;
+    --red:#9e2020; --border:rgba(196,161,74,.18); --border-bright:rgba(196,161,74,.45);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.5;}
+
+  header{border-bottom:1px solid var(--border);padding:0 4rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;background:rgba(12,11,9,.92);backdrop-filter:blur(8px);z-index:100;}
+  .header-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.15em;color:var(--gold);text-decoration:none;}
+  nav{display:flex;gap:2.5rem;align-items:center;}
+  nav a{font-family:'DM Mono',monospace;font-size:.65rem;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+  nav a:hover{color:var(--gold);}
+
+  /* ── PHOTO HEADER ─────────────────────────────────────────── */
+  .photo-header{
+    padding:3rem 4rem 2rem;
+    border-bottom:1px solid var(--border);
+    animation:fadeUp .6s ease both;
+  }
+  .crumb{
+    font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold-dim);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;
+  }
+  .crumb a{color:var(--gold-dim);text-decoration:none;transition:color .2s;}
+  .crumb a:hover{color:var(--gold);}
+  .crumb-sep{color:var(--border-bright);}
+  .photo-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;}
+  .photo-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,4.5rem);letter-spacing:.04em;line-height:.95;color:var(--cream);}
+  .photo-title .year{color:var(--gold);}
+
+  /* ── MAIN LAYOUT ──────────────────────────────────────────── */
+  .photo-body{
+    display:grid;
+    grid-template-columns:1fr 340px;
+    gap:0;
+    border-bottom:1px solid var(--border);
+    min-height:60vh;
+  }
+
+  /* ── IMAGE PANEL ──────────────────────────────────────────── */
+  .photo-image-panel{
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:3rem;
+    background:var(--bg-card);
+    position:relative;
+  }
+  .photo-image-wrap{
+    position:relative;
+    width:100%;
+    max-width:860px;
+  }
+  .photo-image-wrap img{
+    width:100%;
+    height:auto;
+    display:block;
+    max-height:72vh;
+    object-fit:contain;
+  }
+  .photo-image-wrap.img-error{
+    background:#111;
+    aspect-ratio:3/2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .photo-image-wrap.img-error::after{
+    content:'Image not available';
+    font-family:'DM Mono',monospace;
+    font-size:.65rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+    opacity:.3;
+  }
+  .photo-livery-badge{
+    position:absolute;
+    top:1rem;
+    right:1rem;
+    font-family:'DM Mono',monospace;
+    font-size:.55rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    padding:.3rem .75rem;
+    border:1px solid;
+    backdrop-filter:blur(4px);
+  }
+  .badge-full{color:var(--gold);border-color:var(--gold);background:rgba(12,11,9,.8);}
+  .badge-sans{color:var(--cream-dim);border-color:var(--cream-dim);background:rgba(12,11,9,.8);}
+
+  /* PREV/NEXT NAV under image */
+  .photo-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    max-width:860px;
+    margin-top:2rem;
+    padding-top:1.5rem;
+    border-top:1px solid var(--border);
+  }
+  .photo-nav-btn{
+    font-family:'DM Mono',monospace;
+    font-size:.6rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--gold-dim);
+    text-decoration:none;
+    border:1px solid var(--border);
+    padding:.6rem 1.2rem;
+    transition:color .2s,border-color .2s;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    background:transparent;
+    cursor:pointer;
+  }
+  .photo-nav-btn:hover{color:var(--gold);border-color:var(--border-bright);}
+  .photo-nav-btn.disabled{opacity:.25;pointer-events:none;}
+  .photo-nav-center{
+    font-family:'DM Mono',monospace;
+    font-size:.55rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+    opacity:.5;
+  }
+
+  /* ── SIDEBAR ──────────────────────────────────────────────── */
+  .photo-sidebar{
+    display:flex;
+    flex-direction:column;
+    border-left:1px solid var(--border);
+  }
+
+  .sidebar-section{
+    padding:2rem;
+    border-bottom:1px solid var(--border);
+  }
+  .sidebar-label{
+    font-family:'DM Mono',monospace;
+    font-size:.55rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--gold-dim);
+    margin-bottom:.4rem;
+  }
+  .sidebar-value{
+    font-size:1.05rem;
+    color:var(--cream);
+    font-weight:300;
+  }
+  .sidebar-value.large{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:2.2rem;
+    color:var(--gold);
+    letter-spacing:.04em;
+    line-height:1;
+  }
+  .sidebar-value a{
+    color:var(--cream);
+    text-decoration:none;
+    border-bottom:1px solid var(--border);
+    transition:color .2s,border-color .2s;
+  }
+  .sidebar-value a:hover{color:var(--gold);border-color:var(--gold);}
+
+  .livery-type-block{
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+    margin-top:.5rem;
+  }
+  .livery-tag{
+    font-family:'DM Mono',monospace;
+    font-size:.6rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    padding:.35rem .8rem;
+    border:1px solid;
+    display:inline-block;
+  }
+  .tag-full{color:var(--gold);border-color:var(--gold);}
+  .tag-sans{color:var(--cream-dim);border-color:var(--cream-dim);}
+  .livery-desc{font-size:.9rem;color:var(--cream-dim);font-weight:300;line-height:1.55;margin-top:.5rem;}
+
+  /* Filename display */
+  .filename-block{
+    font-family:'DM Mono',monospace;
+    font-size:.62rem;
+    letter-spacing:.08em;
+    color:var(--cream-dim);
+    word-break:break-all;
+    line-height:1.6;
+    background:var(--bg);
+    border:1px solid var(--border);
+    padding:.6rem .8rem;
+    margin-top:.4rem;
+  }
+
+  /* Filter links in sidebar */
+  .filter-links{
+    display:flex;
+    flex-direction:column;
+    gap:.5rem;
+    margin-top:.5rem;
+  }
+  .filter-link{
+    font-family:'DM Mono',monospace;
+    font-size:.58rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--gold-dim);
+    text-decoration:none;
+    border-bottom:1px solid var(--border);
+    padding-bottom:2px;
+    transition:color .2s,border-color .2s;
+    width:fit-content;
+  }
+  .filter-link:hover{color:var(--gold);border-color:var(--gold);}
+
+  /* ── RELATED PHOTOS ───────────────────────────────────────── */
+  .related-section{
+    padding:4rem;
+    border-bottom:1px solid var(--border);
+  }
+  .related-eyebrow{
+    font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;
+  }
+  .related-title{
+    font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;color:var(--cream);margin-bottom:2rem;
+  }
+
+  /* ── LOADING / ERROR ──────────────────────────────────────── */
+  .page-loading{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:60vh;
+    gap:1.5rem;
+  }
+  .page-loading-text{
+    font-family:'DM Mono',monospace;
+    font-size:.65rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+  }
+  .page-error{
+    padding:6rem 4rem;
+    text-align:center;
+  }
+  .page-error-title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:3rem;
+    color:var(--red);
+    letter-spacing:.06em;
+    margin-bottom:1rem;
+  }
+  .page-error-msg{
+    font-family:'DM Mono',monospace;
+    font-size:.65rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+  }
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .photo-header{animation:fadeUp .6s ease both;}
+  .photo-body{animation:fadeUp .6s .1s ease both;}
+  .related-section{animation:fadeUp .6s .2s ease both;}
+
+  @media(max-width:900px){
+    header{padding:0 1.5rem;}
+    nav{gap:1.2rem;}
+    .photo-header{padding:2rem 1.5rem 1.5rem;}
+    .photo-body{grid-template-columns:1fr;}
+    .photo-image-panel{border-right:none;border-bottom:1px solid var(--border);padding:2rem 1.5rem;}
+    .photo-sidebar{border-left:none;}
+    .related-section{padding:2.5rem 1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="header-logo">Sans Tabac</a>
+  <nav>
+    <a href="browse.html?group=constructor">Constructors</a>
+    <a href="browse.html?group=year">By Year</a>
+    <a href="browse.html?group=brand">Brands</a>
+    <a href="browse.html?livery=sans">Sans Tabac Only</a>
+    <a href="browse.html">All Photos</a>
+  </nav>
+</header>
+
+<!-- Content injected by JS -->
+<div id="page-content">
+  <div class="page-loading">
+    <div class="page-loading-text">Loading photograph</div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+SansTabac.injectCardStyles();
+const base = SansTabac.getBase();
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const photoId = params.get('id');
+
+  const photos = await SansTabac.loadPhotos();
+
+  if (!photoId || !photos.length) {
+    renderError('Photo not found', 'No photo ID specified or archive is empty.');
+    return;
+  }
+
+  // Sort all photos by year asc, then constructor for stable ordering
+  const sorted = [...photos].sort((a,b) => a.year - b.year || a.constructor.localeCompare(b.constructor));
+  const idx = sorted.findIndex(p => p.id === photoId);
+
+  if (idx === -1) {
+    renderError('Photo not found', `No photograph with ID "${photoId}" exists in the archive.`);
+    return;
+  }
+
+  const photo = sorted[idx];
+  const prev = idx > 0 ? sorted[idx - 1] : null;
+  const next = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+
+  // Related: same constructor, different photo, up to 4
+  const related = photos
+    .filter(p => p.id !== photo.id && p.constructor === photo.constructor)
+    .sort(() => Math.random() - .5)
+    .slice(0, 4);
+
+  renderPage(photo, prev, next, related, idx, sorted.length);
+  document.title = `${photo.year} ${photo.constructor} ${photo.brand} — Sans Tabac`;
+}
+
+function renderPage(photo, prev, next, related, idx, total) {
+  const isFullLivery = photo.livery === 'full';
+  const liveryLabel = isFullLivery ? 'Full Livery' : 'Sans Tabac';
+  const liveryDesc = isFullLivery
+    ? 'Photographed at a race where tobacco advertising was permitted.'
+    : 'Photographed where advertising bans required tobacco branding to be removed.';
+
+  const fromParam = new URLSearchParams(window.location.search).get('from');
+  const backUrl = fromParam ? decodeURIComponent(fromParam) : 'browse.html';
+  const backLabel = fromParam ? 'Back to Browse' : 'All Photos';
+
+  document.getElementById('page-content').innerHTML = `
+    <div class="photo-header">
+      <div class="crumb">
+        <a href="index.html">Sans Tabac</a>
+        <span class="crumb-sep">/</span>
+        <a href="${backUrl}">${backLabel}</a>
+        <span class="crumb-sep">/</span>
+        <span>${photo.year} · ${photo.constructor}</span>
+      </div>
+      <div class="photo-eyebrow">${photo.brand} &middot; ${liveryLabel}</div>
+      <div class="photo-title">
+        <span class="year">${photo.year}</span> ${photo.constructor}${photo.description ? ' · ' + photo.description : ''}
+      </div>
+    </div>
+
+    <div class="photo-body">
+      <!-- IMAGE PANEL -->
+      <div class="photo-image-panel">
+        <div class="photo-image-wrap" id="img-wrap">
+          <img
+            src="${base}${photo.file}"
+            alt="${[photo.year, photo.constructor, photo.brand, photo.description].filter(Boolean).join(' · ')}"
+            onerror="document.getElementById('img-wrap').classList.add('img-error');this.remove()"
+          >
+          <div class="photo-livery-badge ${isFullLivery ? 'badge-full' : 'badge-sans'}">
+            ${liveryLabel}
+          </div>
+        </div>
+
+        <div class="photo-nav">
+          ${prev
+            ? `<a href="photo.html?id=${encodeURIComponent(prev.id)}${fromParam?'&from='+encodeURIComponent(fromParam):''}" class="photo-nav-btn">← ${prev.year} ${prev.constructor}</a>`
+            : `<span class="photo-nav-btn disabled">← Previous</span>`
+          }
+          <span class="photo-nav-center">${idx + 1} of ${total}</span>
+          ${next
+            ? `<a href="photo.html?id=${encodeURIComponent(next.id)}${fromParam?'&from='+encodeURIComponent(fromParam):''}" class="photo-nav-btn">${next.year} ${next.constructor} →</a>`
+            : `<span class="photo-nav-btn disabled">Next →</span>`
+          }
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="photo-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-label">Season</div>
+          <div class="sidebar-value large">${photo.year}</div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Constructor</div>
+          <div class="sidebar-value">
+            <a href="browse.html?constructor=${encodeURIComponent(photo.constructor)}">${photo.constructor}</a>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Tobacco Sponsor</div>
+          <div class="sidebar-value">
+            <a href="browse.html?brand=${encodeURIComponent(photo.brand)}">${photo.brand}</a>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Livery Type</div>
+          <div class="livery-type-block">
+            <span class="livery-tag ${isFullLivery ? 'tag-full' : 'tag-sans'}">${liveryLabel}</span>
+          </div>
+          <div class="livery-desc">${liveryDesc}</div>
+        </div>
+
+        ${photo.description ? `
+        <div class="sidebar-section">
+          <div class="sidebar-label">Description</div>
+          <div class="sidebar-value">${photo.description}</div>
+        </div>` : ''}
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Filename</div>
+          <div class="filename-block">${photo.filename || photo.file.replace('photos/','')}</div>
+        </div>
+
+        <div class="sidebar-section" style="margin-top:auto">
+          <div class="sidebar-label">Browse Related</div>
+          <div class="filter-links">
+            <a href="browse.html?constructor=${encodeURIComponent(photo.constructor)}" class="filter-link">All ${photo.constructor} photographs →</a>
+            <a href="browse.html?brand=${encodeURIComponent(photo.brand)}" class="filter-link">All ${photo.brand} photographs →</a>
+            <a href="browse.html?year=${photo.year}" class="filter-link">All ${photo.year} season photographs →</a>
+            <a href="browse.html?livery=${photo.livery}" class="filter-link">All ${liveryLabel} photographs →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ${related.length ? `
+    <div class="related-section">
+      <div class="related-eyebrow">More from the archive</div>
+      <div class="related-title">More ${photo.constructor} Photographs</div>
+      <div class="photo-grid">
+        ${related.map(p => {
+          const tc = SansTabac.teamColor(p.constructor);
+          const desc = [p.year, p.constructor, p.description].filter(Boolean).join(' · ');
+          return `<article class="photo-card" onclick="window.location='photo.html?id=${encodeURIComponent(p.id)}'">
+            <div class="photo-card-img-wrap">
+              <img src="${base}${p.file}" alt="${desc}" loading="lazy"
+                onerror="this.parentElement.classList.add('img-error');this.remove()">
+              <div class="photo-card-livery ${p.livery==='sans'?'badge-sans':'badge-full'}">
+                ${p.livery==='sans'?'Sans Tabac':'Full Livery'}
+              </div>
+            </div>
+            <div class="photo-card-meta">
+              <div class="photo-card-primary">
+                <span class="photo-card-year">${p.year}</span>
+                <span class="photo-card-constructor" style="--tc:${tc}">${p.constructor}</span>
+              </div>
+              <div class="photo-card-brand">${p.brand}</div>
+              ${p.description?`<div class="photo-card-desc">${p.description}</div>`:''}
+            </div>
+          </article>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function renderError(title, msg) {
+  document.getElementById('page-content').innerHTML = `
+    <div class="page-error">
+      <div class="page-error-title">${title}</div>
+      <div class="page-error-msg">${msg}</div>
+      <div style="margin-top:2rem">
+        <a href="browse.html" style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dim);text-decoration:none;border-bottom:1px solid var(--gold-dim);padding-bottom:2px">← Return to Archive</a>
+      </div>
+    </div>`;
+}
+
+init().catch(err => renderError('Error', err.message));
+</script>
+</body>
+</html>
